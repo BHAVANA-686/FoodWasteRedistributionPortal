@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Food Waste Tracking & Redistribution Portal</title>
 
     <style>
@@ -14,18 +15,18 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f4f7f5;
-            color: #24332b;
+            background: #f3f7f4;
+            color: #26372d;
         }
 
         header {
             background: #176b48;
             color: white;
-            padding: 28px 6%;
+            padding: 30px 6%;
         }
 
         header h1 {
-            margin: 0 0 10px;
+            margin: 0 0 12px;
             font-size: 30px;
         }
 
@@ -34,294 +35,61 @@
             line-height: 1.6;
         }
 
-        main {
-            max-width: 1250px;
-            margin: 28px auto;
-            padding: 0 20px;
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 24px;
+        }
+
+        .section-title {
+            margin: 30px 0 18px;
+            color: #176b48;
         }
 
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 28px;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 18px;
         }
 
-        .stat {
+        .stat-card {
             background: white;
             padding: 22px;
             border-radius: 10px;
             border-left: 5px solid #27845b;
-            box-shadow: 0 3px 12px #0000000c;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
         }
 
-        .stat h3 {
-            margin: 0 0 12px;
-            font-size: 15px;
+        .stat-card h3 {
+            margin: 0 0 14px;
+            font-size: 14px;
             color: #65756b;
         }
 
-        .stat strong {
+        .stat-card strong {
             font-size: 30px;
-        }
-
-        .section-title {
-            margin: 30px 0 16px;
-        }
-
-        .table-container {
-            background: white;
-            border-radius: 10px;
-            overflow-x: auto;
-            box-shadow: 0 3px 12px #0000000c;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 1050px;
-        }
-
-        th, td {
-            padding: 15px 12px;
-            text-align: left;
-            border-bottom: 1px solid #e7ece8;
-            font-size: 14px;
-        }
-
-        th {
-            background: #e5f2e9;
             color: #176b48;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 20px;
+        .stat-card p {
+            margin-bottom: 0;
             font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
+            color: #68766d;
         }
 
-        .available {
-            background: #d8f5df;
-            color: #176b35;
-        }
-
-        .reserved {
-            background: #fff0c7;
-            color: #8a6100;
-        }
-
-        .collected {
-            background: #dceaff;
-            color: #2056a5;
-        }
-
-        .redistributed {
-            background: #e9ddff;
-            color: #6336a0;
-        }
-
-        .quantity {
-            font-weight: bold;
-            color: #176b48;
-        }
-
-        .notice {
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 24px;
-            line-height: 1.7;
+            padding: 16px;
+            border-radius: 8px;
         }
 
-        footer {
-            text-align: center;
-            padding: 25px;
-            margin-top: 35px;
-            background: #e5eee8;
-            color: #526359;
-            font-size: 13px;
-        }
-
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 23px;
-            }
-
-            main {
-                padding: 0 12px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-    <h1>Food Waste Tracking & Redistribution Portal</h1>
-    <p>Connecting university canteens, restaurants and community organizations
-       to reduce food waste and support communities.</p>
-</header>
-
-<main>
-
-    <h2 class="section-title">Redistribution Status Dashboard</h2>
-
-    <section class="dashboard">
-        <div class="stat">
-            <h3>Total Food Records</h3>
-            <strong id="totalCount">5</strong>
-        </div>
-
-        <div class="stat">
-            <h3>Available</h3>
-            <strong id="availableCount">2</strong>
-        </div>
-
-        <div class="stat">
-            <h3>Reserved</h3>
-            <strong id="reservedCount">1</strong>
-        </div>
-
-        <div class="stat">
-            <h3>Collected</h3>
-            <strong id="collectedCount">1</strong>
-        </div>
-
-        <div class="stat">
-            <h3>Redistributed</h3>
-            <strong id="redistributedCount">1</strong>
-        </div>
-    </section>
-
-    <h2 class="section-title">Surplus Food Availability</h2>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Food Item</th>
-                    <th>Contributing Establishment</th>
-                    <th>Quantity</th>
-                    <th>Collection Deadline</th>
-                    <th>Pickup Location</th>
-                    <th>Participating Organization</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody id="foodRecords">
-                <tr>
-                    <td>Vegetable Rice</td>
-                    <td>Green Leaf Restaurant</td>
-                    <td class="quantity">15 kg</td>
-                    <td>22 Oct 2026, 12:30 PM</td>
-                    <td>Vellore Main Road</td>
-                    <td>Hope Community Kitchen</td>
-                    <td><span class="badge available">Available</span></td>
-                </tr>
-
-                <tr>
-                    <td>Chapati and Curry</td>
-                    <td>University Canteen</td>
-                    <td class="quantity">10 kg</td>
-                    <td>22 Oct 2026, 1:00 PM</td>
-                    <td>University Block A</td>
-                    <td>Helping Hands NGO</td>
-                    <td><span class="badge reserved">Reserved</span></td>
-                </tr>
-
-                <tr>
-                    <td>Fresh Bread</td>
-                    <td>Daily Bake Bakery</td>
-                    <td class="quantity">8 kg</td>
-                    <td>22 Oct 2026, 2:00 PM</td>
-                    <td>Katpadi Junction</td>
-                    <td>Care and Share Foundation</td>
-                    <td><span class="badge available">Available</span></td>
-                </tr>
-
-                <tr>
-                    <td>Lemon Rice</td>
-                    <td>Campus Food Court</td>
-                    <td class="quantity">12 kg</td>
-                    <td>22 Oct 2026, 11:00 AM</td>
-                    <td>University Block C</td>
-                    <td>Hope Community Kitchen</td>
-                    <td><span class="badge collected">Collected</span></td>
-                </tr>
-
-                <tr>
-                    <td>Vegetable Meals</td>
-                    <td>Sunrise Family Restaurant</td>
-                    <td class="quantity">20 kg</td>
-                    <td>22 Oct 2026, 10:30 AM</td>
-                    <td>Katpadi Market</td>
-                    <td>Helping Hands NGO</td>
-                    <td><span class="badge redistributed">Redistributed</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <section class="notice">
-        <h3>Collection Information</h3>
-        <p>
-            Food marked as <strong>Available</strong> is awaiting collection.
-            Authorized community organizations can coordinate pickups before
-            the listed collection deadlines.
-        </p>
-        <p>
-            <strong>Estimated quantity available for collection:</strong>
-            <span id="availableQuantity">23 kg</span>
-        </p>
-        <p>
-            This demonstration portal uses sample records for academic purposes.
-        </p>
-    </section>
-
-</main>
-
-<footer>
-    Food Waste Tracking and Redistribution Portal | Academic CI/CD Project
-</footer>
-
-<script>
-    const rows = [...document.querySelectorAll("#foodRecords tr")];
-
-    const counts = {
-        Available: 0,
-        Reserved: 0,
-        Collected: 0,
-        Redistributed: 0
-    };
-
-    let availableKg = 0;
-
-    rows.forEach(row => {
-        const status = row.querySelector(".badge").textContent.trim();
-        const quantity = parseFloat(row.cells[2].textContent);
-
-        counts[status]++;
-
-        if (status === "Available") {
-            availableKg += quantity;
-        }
-    });
-
-    document.getElementById("totalCount").textContent = rows.length;
-    document.getElementById("availableCount").textContent = counts.Available;
-    document.getElementById("reservedCount").textContent = counts.Reserved;
-    document.getElementById("collectedCount").textContent = counts.Collected;
-    document.getElementById("redistributedCount").textContent =
-        counts.Redistributed;
-
-    document.getElementById("availableQuantity").textContent =
-        availableKg + " kg";
-</script>
-
-</body>
-</html>
+        select {
+            padding: 10px;
+            border: 1px solid #cbd8cf;
+            border-radius: 5px;
 
