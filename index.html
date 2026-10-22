@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Food Waste Tracking & Redistribution Portal</title>
 
     <style>
@@ -92,4 +91,347 @@
             padding: 10px;
             border: 1px solid #cbd8cf;
             border-radius: 5px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th, td {
+            padding: 16px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e8eee9;
+            font-size: 14px;
+        }
+
+        th {
+            background: #e4f0e8;
+            color: #176b48;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f7fbf8;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .available {
+            background: #d9f3df;
+            color: #176b37;
+        }
+
+        .reserved {
+            background: #fff0c7;
+            color: #8a6100;
+        }
+
+        .collected {
+            background: #dceafe;
+            color: #1e50a2;
+        }
+
+        .redistributed {
+            background: #e9ddff;
+            color: #6137a3;
+        }
+
+        .info-box {
+            margin-top: 26px;
+            padding: 20px;
+            background: #e5f2e9;
+            border-radius: 8px;
+            border-left: 5px solid #27845b;
+            line-height: 1.7;
+        }
+
+        .empty-message {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            color: #65756b;
+        }
+
+        footer {
+            margin-top: 40px;
+            background: #174c36;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 24px 5%;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 0 14px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Food Waste Tracking & Redistribution Portal</h1>
+    <p>
+        Connecting food donors with NGOs and community organisations
+        to reduce food waste and support people in need.
+    </p>
+</header>
+
+<main class="container">
+
+    <h2 class="section-title">Redistribution Dashboard</h2>
+
+    <section class="dashboard" aria-label="Food redistribution statistics">
+
+        <div class="stat-card">
+            <h3>Available Donations</h3>
+            <strong id="availableCount">0</strong>
+            <p>Waiting for an organisation</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Reserved Donations</h3>
+            <strong id="reservedCount">0</strong>
+            <p>Reserved for pickup</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Collected Donations</h3>
+            <strong id="collectedCount">0</strong>
+            <p>Collected by recipients</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Redistributed Donations</h3>
+            <strong id="redistributedCount">0</strong>
+            <p>Successfully redistributed</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Available Food Quantity</h3>
+            <strong id="availableQuantity">0 kg</strong>
+            <p>Food currently available</p>
+        </div>
+
+    </section>
+
+    <h2 class="section-title">Surplus Food Donations</h2>
+
+    <section class="controls">
+        <label for="statusFilter"><strong>Filter by status:</strong></label>
+
+        <select id="statusFilter">
+            <option value="All">All Donations</option>
+            <option value="Available">Available</option>
+            <option value="Reserved">Reserved</option>
+            <option value="Collected">Collected</option>
+            <option value="Redistributed">Redistributed</option>
+        </select>
+
+        <span id="recordCount">Showing 5 donations</span>
+    </section>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Food Item</th>
+                    <th>Contributor</th>
+                    <th>Quantity</th>
+                    <th>Pickup Deadline</th>
+                    <th>Pickup Location</th>
+                    <th>Recipient Organisation</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="donationTable">
+
+                <tr data-status="Available" data-quantity="15">
+                    <td>Vegetable Rice</td>
+                    <td>Green Leaf Restaurant</td>
+                    <td>15 kg</td>
+                    <td>22 Oct 2026, 12:30 PM</td>
+                    <td>Vellore Main Road</td>
+                    <td>Hope Community Kitchen</td>
+                    <td><span class="status available">Available</span></td>
+                </tr>
+
+                <tr data-status="Reserved" data-quantity="10">
+                    <td>Chapati and Vegetable Curry</td>
+                    <td>University Canteen</td>
+                    <td>10 kg</td>
+                    <td>22 Oct 2026, 1:00 PM</td>
+                    <td>University Block A</td>
+                    <td>Helping Hands NGO</td>
+                    <td><span class="status reserved">Reserved</span></td>
+                </tr>
+
+                <tr data-status="Available" data-quantity="8">
+                    <td>Fresh Bread</td>
+                    <td>Daily Bake Bakery</td>
+                    <td>8 kg</td>
+                    <td>22 Oct 2026, 2:00 PM</td>
+                    <td>Katpadi Junction</td>
+                    <td>Care and Share Foundation</td>
+                    <td><span class="status available">Available</span></td>
+                </tr>
+
+                <tr data-status="Collected" data-quantity="12">
+                    <td>Lemon Rice</td>
+                    <td>Campus Food Court</td>
+                    <td>12 kg</td>
+                    <td>22 Oct 2026, 11:00 AM</td>
+                    <td>University Block C</td>
+                    <td>Hope Community Kitchen</td>
+                    <td><span class="status collected">Collected</span></td>
+                </tr>
+
+                <tr data-status="Redistributed" data-quantity="20">
+                    <td>Vegetable Meals</td>
+                    <td>Sunrise Family Restaurant</td>
+                    <td>20 kg</td>
+                    <td>22 Oct 2026, 10:30 AM</td>
+                    <td>Katpadi Market</td>
+                    <td>Helping Hands NGO</td>
+                    <td><span class="status redistributed">Redistributed</span></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="empty-message" id="emptyMessage">
+            No donations found for the selected status.
+        </div>
+    </div>
+
+    <section class="info-box">
+        <h3>About the Portal</h3>
+        <p>
+            This portal helps restaurants, bakeries, university canteens
+            and other food contributors list surplus food for redistribution.
+            NGOs and community organisations can identify available donations,
+            coordinate pickups and track the redistribution process.
+        </p>
+        <p>
+            <strong>Our goal:</strong> Reduce food wastage, improve donation
+            coordination and help surplus food reach people who need it.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    Food Waste Tracking & Redistribution Portal | Sustainable Communities
+</footer>
+
+<script>
+    function updateDashboard() {
+        const rows = Array.from(
+            document.querySelectorAll("#donationTable tr")
+        );
+
+        let available = 0;
+        let reserved = 0;
+        let collected = 0;
+        let redistributed = 0;
+        let availableKg = 0;
+
+        rows.forEach(function(row) {
+            const status = row.dataset.status;
+            const quantity = Number(row.dataset.quantity);
+
+            if (status === "Available") {
+                available++;
+                availableKg += quantity;
+            } else if (status === "Reserved") {
+                reserved++;
+            } else if (status === "Collected") {
+                collected++;
+            } else if (status === "Redistributed") {
+                redistributed++;
+            }
+        });
+
+        document.getElementById("availableCount").textContent = available;
+        document.getElementById("reservedCount").textContent = reserved;
+        document.getElementById("collectedCount").textContent = collected;
+        document.getElementById("redistributedCount").textContent = redistributed;
+        document.getElementById("availableQuantity").textContent =
+            availableKg + " kg";
+    }
+
+    function filterDonations() {
+        const selectedStatus =
+            document.getElementById("statusFilter").value;
+
+        const rows = Array.from(
+            document.querySelectorAll("#donationTable tr")
+        );
+
+        let visibleCount = 0;
+
+        rows.forEach(function(row) {
+            const matches =
+                selectedStatus === "All" ||
+                row.dataset.status === selectedStatus;
+
+            row.style.display = matches ? "" : "none";
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        document.getElementById("recordCount").textContent =
+            "Showing " + visibleCount +
+            (visibleCount === 1 ? " donation" : " donations");
+
+        document.getElementById("emptyMessage").style.display =
+            visibleCount === 0 ? "block" : "none";
+    }
+
+    document.getElementById("statusFilter").addEventListener(
+        "change",
+        filterDonations
+    );
+
+    updateDashboard();
+    filterDonations();
+</script>
+
+</body>
+</html>
 
